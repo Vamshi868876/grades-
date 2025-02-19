@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Marks Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        form {
+            max-width: 400px;
+            margin: auto;
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 15px;
+            background: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Student Marks Calculator</h2>
+    <form id="marksForm">
+        <input type="number" id="sub1" placeholder="Subject 1 Marks" required>
+        <input type="number" id="sub2" placeholder="Subject 2 Marks" required>
+        <input type="number" id="sub3" placeholder="Subject 3 Marks" required>
+        <input type="number" id="sub4" placeholder="Subject 4 Marks" required>
+        <input type="number" id="sub5" placeholder="Subject 5 Marks" required>
+        <button type="submit">Calculate</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById("marksForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            let marks = {
+                sub1: document.getElementById("sub1").value,
+                sub2: document.getElementById("sub2").value,
+                sub3: document.getElementById("sub3").value,
+                sub4: document.getElementById("sub4").value,
+                sub5: document.getElementById("sub5").value
+            };
+
+            fetch("/calculate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(marks)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerHTML = 
+                    `<p>Total Marks: ${data.total}</p>
+                     <p>Percentage: ${data.percentage}%</p>`;
+            });
+        });
+    </script>
+</body>
+</html>
